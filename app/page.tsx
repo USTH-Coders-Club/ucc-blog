@@ -13,7 +13,7 @@ const categories = [
 
 export default function Home() {
   return (
-    <div className="flex flex-col font-[family-name:var(--font-manrope)] bg-bg">
+    <div className="flex flex-col font-[family-name:var(--font-manrope)] ">
       {/* Hero Section */}
       <div className="flex flex-col h-[500px] w-full items-center justify-center gap-4">
         <Image src="/ucc_logo_black.png" alt="UCC Logo" width={170} height={170} />
@@ -28,7 +28,7 @@ export default function Home() {
       </div>
 
       {/* Blog Section */}
-      <div className="grid grid-cols-3 gap-4 h-[1200px] max-w-[1000px] w-full mx-auto">
+      <div className="grid grid-cols-3 gap-4 max-w-[1000px] w-full mx-auto">
         <div className="col-span-1 flex flex-col gap-8">
           {/* First column content (1/3) */}
           <Button className="mr-auto text-lg font-semibold font-[family-name:var(--font-space-grotesk)]">All</Button>
