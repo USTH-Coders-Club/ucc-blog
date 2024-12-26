@@ -4,19 +4,20 @@ import { Button } from "./ui/button";
 export function Footer() {
   return (
     <>
-      <div className="flex justify-between bottom-0 left-0 w-full text-white bg-black border-t py-8 px-32">
-        <div className="p-8 w-1/4">
+      <div className="flex flex-col md:flex-row justify-between bottom-0 left-0 w-full text-white bg-black border-t py-4 md:py-8 px-4 md:px-32 mt-8">
+        <div className="p-4 md:p-8 w-full md:w-1/4">
           <Image
             src="/ucc_logo_white.png"
             alt="UCC Logo"
             width={70}
             height={70}
+            className="mx-auto md:mx-0"
           />
-          <div>Wisconsin Ave, Suite 700 Chevy Chase, Maryland 20815</div>
+          <div className="text-center md:text-left mt-4">Wisconsin Ave, Suite 700 Chevy Chase, Maryland 20815</div>
         </div>
-        <div className="p-8 w-1/4">
-          <p className="font-bold text-xl">Company</p>
-          <div className="py-4">
+        <div className="p-4 md:p-8 w-full md:w-1/4 text-center md:text-left">
+          <p className="font-bold text-lg md:text-xl">Company</p>
+          <div className="py-2 md:py-4">
             <p>About Us</p>
             <p>Careers</p>
             <p>FAQs</p>
@@ -24,15 +25,15 @@ export function Footer() {
             <p>Contact Us</p>
           </div>
         </div>
-        <div className="p-8 flex flex-col gap-4 w-1/4">
-          <Button className="mr-auto text-lg font-semibold font-[family-name:var(--font-space-grotesk)] w-full">
+        <div className="p-4 md:p-8 flex flex-col gap-4 w-full md:w-1/4">
+          <Button className="text-base md:text-lg font-semibold font-[family-name:var(--font-space-grotesk)] w-full">
             Contact Us
           </Button>
-          <Button className="mr-auto text-lg font-semibold font-[family-name:var(--font-space-grotesk)] w-full">
+          <Button className="text-base md:text-lg font-semibold font-[family-name:var(--font-space-grotesk)] w-full">
             Contact Us
           </Button>
         </div>
-        <div className="p-8 flex justify-center gap-2 w-1/4 ">
+        <div className="p-4 md:p-8 flex justify-center gap-2 w-full md:w-1/4">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"

@@ -1,42 +1,68 @@
 import Image from "next/image";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./ui/card";
-import { Input } from "./ui/input";
-import { Label } from "./ui/label";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "./ui/select";
+import { Card } from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Button } from "./ui/button";
-import { Eye } from "lucide-react";
+import { Badge } from "./ui/badge";
+import Link from "next/link";
 
-export default function FeaturedPostCard() {
+type FeaturedPostCardProps = {
+  title?: string;
+  date?: string;
+  excerpt?: string;
+  category?: string;
+  author?: string;
+  tags?: string[];
+  image_url?: string;
+  slug?: string;
+};
+
+export default function FeaturedPostCard({
+  title,
+  date,
+  excerpt,
+  category,
+  author,
+  tags,
+  image_url,
+  slug,
+}: FeaturedPostCardProps) {
   return (
-    <Card className="w-full h-[450px] flex flex-col justify-end p-4 gap-3">
-        <div className="flex-1 bg-gray-200 rounded-md border-border"></div>
-        <span className="text-sm font-base">
-            Cyber Security • December 18, 2024
-        </span>
-        <h2 className="text-xl font-heading font-[family-name:var(--font-space-grotesk)]">
-            Patch Me If You Can: The Truth About Smartphone Vulnerabilities
-        </h2>
-        <p className="text-text font-base">
-            Discover how smartphone manufacturers conceal security flaws, the risks these vulnerabilities pose to users and businesses, and actionable steps to protect devices from data breaches, identity theft, and exploitative attacks.
-        </p>
-        <div className="flex flex-row items-center justify-between">
-            <div className="flex flex-row gap-4 items-center">
-                <Avatar className="w-10 h-10">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-            <span className="text-text">
-                by <span className="font-bold">John Doe</span>
-            </span>
-            </div>
-            <div className="flex flex-row gap-2 items-center">
-                <Eye className="w-6 h-6" />
-                <span className="font-base">
-                    1000
-                </span>
-            </div>
+    <Link href={`/blog/${slug}`}>
+      <Card className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] flex flex-col justify-end p-2 sm:p-3 md:p-4 gap-2 sm:gap-3">
+        <div className="relative flex-1 w-full">
+          <Image
+            className="object-cover rounded-md"
+            src={image_url ? image_url : "/ucc_logo_black.png"}
+            alt={title || "UCC Logo"}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
+          />
         </div>
-    </Card>
+        <span className="text-xs sm:text-sm font-base">
+          {category} • {date}
+        </span>
+        <h2 className="text-lg sm:text-xl md:text-2xl font-heading font-[family-name:var(--font-space-grotesk)]">
+          {title}
+        </h2>
+        <p className="text-sm sm:text-base text-text font-base line-clamp-2">{excerpt}</p>
+        <div className="flex flex-row items-center justify-between">
+          <div className="flex flex-row gap-2 sm:gap-4 items-center">
+            <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+            <span className="text-sm sm:text-base text-text">
+              by <span className="font-bold">{author}</span>
+            </span>
+          </div>
+          <div className="flex flex-row gap-1 sm:gap-2 items-center">
+            {tags?.map((tag, index) => (
+              <Badge key={index} variant="neutral" className="text-xs sm:text-sm">
+                {tag}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      </Card>
+    </Link>
   );
 }
