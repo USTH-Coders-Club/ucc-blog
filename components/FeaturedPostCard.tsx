@@ -29,7 +29,7 @@ export default function FeaturedPostCard({
   const authorName = author?.split("|")[1] || "USTH Coders Club";
   return (
     <Link href={`/blog/${slug}`}>
-      <Card className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] flex flex-col justify-end p-2 sm:p-3 md:p-4 gap-2 sm:gap-3">
+      <Card className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] flex flex-col justify-end p-4 md:p-6 gap-2 sm:gap-3">
         <div className="relative flex-1 w-full">
           <Image
             className="object-cover rounded-md"
