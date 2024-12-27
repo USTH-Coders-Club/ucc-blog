@@ -40,14 +40,14 @@ body {
     0,
     0,
     0.8
-  ); /* background color overlay for alert dialogs, modals, etc. */
+  ); 
 
   --bg: #fefaf1;
-  --bw: #fefaf1; /* white and secondary black e.g. utility class variant would be: bg-[#fff] dark:bg-[#212121] */
-  --blank: #0d0d0d; /* blank black and white */
+  --bw: #fefaf1; 
+  --blank: #0d0d0d; 
   --border: #0d0d0d;
   --text: #0d0d0d;
-  --mtext: #0d0d0d; /* text that is placed on background with main color e.g. text color of default button */
+  --mtext: #0d0d0d; 
   --ring: #0d0d0d;
   --ring-offset: #fefaf1;
 
@@ -68,41 +68,43 @@ body {
   --shadow: var(--box-shadow-x) var(--box-shadow-y) 0px 0px var(--border);
 }
 
+
+
 .hljs {
   display: block;
   overflow-x: auto;
   padding: 0.5em;
-  background: var(--bg);
-  color: var(--text); 
+  background: #ffffff; 
+  color: #333333; 
 }
 
 .hljs-comment,
 .hljs-quote {
-  color: #6a9955;
+  color: #008000; 
   font-style: italic;
 }
 
 .hljs-keyword,
 .hljs-selector-tag,
 .hljs-subst {
-  color: #0070c1;
+  color: #0000ff; 
 }
 
 .hljs-literal,
 .hljs-number,
 .hljs-tag .hljs-attr {
-  color: #b5cea8;
+  color: #800080; 
 }
 
 .hljs-string,
 .hljs-doctag {
-  color: #ce9178;
+  color: #a31515; 
 }
 
 .hljs-title,
 .hljs-section,
 .hljs-selector-id {
-  color: #c586c0;
+  color: #2b91af; 
 }
 
 .hljs-subst {
@@ -111,42 +113,42 @@ body {
 
 .hljs-type,
 .hljs-class .hljs-title {
-  color: #4ec9b0;
+  color: #2b91af; 
 }
 
 .hljs-tag,
 .hljs-name,
 .hljs-attribute {
-  color: #569cd6;
+  color: #800000; 
 }
 
 .hljs-regexp,
 .hljs-link {
-  color: #d16969;
+  color: #d16969; 
 }
 
 .hljs-symbol,
 .hljs-bullet {
-  color: #d7ba7d;
+  color: #b8860b; 
 }
 
 .hljs-built_in,
 .hljs-builtin-name {
-  color: #dcdcaa;
+  color: #ff4500; 
 }
 
 .hljs-meta {
-  color: #4ec9b0;
+  color: #1e90ff; 
 }
 
 .hljs-deletion {
-  background: #ffdad6; 
-  color: #67060c;
+  background: #ffdddd; 
+  color: #a00000; 
 }
 
 .hljs-addition {
-  background: #d4f8d3;
-  color: #1b4721;
+  background: #ddffdd; 
+  color: #006400; 
 }
 
 .hljs-emphasis {
@@ -154,7 +156,7 @@ body {
 }
 
 .hljs-strong {
-  font-weight: var(--heading-font-weight);
+  font-weight: bold;
 }
 
 
@@ -248,8 +250,9 @@ body {
 }
 .notion-render div.notion-code pre code {
   display: block;
-  padding: 34px 16px 32px 32px;
+  padding: 16px 8px 16px 16px;
   background-color: var(--bg);
+  border: 1px solid var(--text);
   border-radius: 3px;
   overflow-x: auto;
 }

@@ -12,6 +12,7 @@ import bookmarkPlugin from "@notion-render/bookmark-plugin";
 import { NotionRenderer } from "@notion-render/client";
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import hljsPlugin from "@notion-render/hljs-plugin";
+import { Metadata } from 'next';
 
 type MoreCardProps = {
   image_url?: string;
@@ -43,6 +44,41 @@ function MoreCard({ image_url, title, date, excerpt, slug }: MoreCardProps) {
     </Link>
   );
 }
+
+export async function generateMetadata(
+  {
+    params,
+  }: {
+    params: Promise<{ slug: string }>;
+  }
+): Promise<Metadata> {
+  const { slug } = await params;
+  const page = await fetchBySlug(slug);
+  
+  if (!page) {
+    return {
+      title: 'Post Not Found'
+    };
+  }
+
+  const title = (page.properties.Title as { title: Array<{ plain_text: string }> }).title[0]?.plain_text;
+  const excerpt = (page.properties.Excerpt as { rich_text: Array<{ plain_text: string }> }).rich_text
+    .map((text: { plain_text: string }) => text.plain_text)
+    .join("");
+
+  return {
+    title: title,
+    description: excerpt,
+    openGraph: {
+      title: title,
+      description: excerpt,
+      type: 'article',
+      publishedTime: (page.properties.Date as { created_time: string }).created_time,
+      authors: [(page.properties.Author as { rich_text: Array<{ plain_text: string }> }).rich_text[0]?.plain_text],
+    }
+  };
+}
+
 export default async function Post({
   params,
 }: {
@@ -130,7 +166,7 @@ export default async function Post({
   return (
     <>
       <div className="flex flex-col lg:flex-row font-[family-name:var(--font-manrope)] p-4 md:p-8 lg:p-24 gap-8 lg:gap-20 h-full ">
-        <Card className="w-full lg:w-3/4 p-4 md:p-6 lg:p-8">
+        <Card className="w-full lg:w-3/4 p-4 md:p-6 lg:p-8 bg-bg">
           <CardTitle className="text-2xl md:text-3xl lg:text-[36px] font-bold">
             {title}
           </CardTitle>
