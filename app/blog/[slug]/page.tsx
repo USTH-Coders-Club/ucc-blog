@@ -1,6 +1,12 @@
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import Link from "next/link";
-import { Card, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+} from "@/components/ui/card";
 import Image from "next/image";
 import {
   fetchBySlug,
@@ -12,7 +18,7 @@ import bookmarkPlugin from "@notion-render/bookmark-plugin";
 import { NotionRenderer } from "@notion-render/client";
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import hljsPlugin from "@notion-render/hljs-plugin";
-import { Metadata } from 'next';
+import { Metadata } from "next";
 
 type MoreCardProps = {
   image_url?: string;
@@ -24,7 +30,7 @@ type MoreCardProps = {
 };
 function MoreCard({ image_url, title, date, excerpt, slug }: MoreCardProps) {
   return (
-    <Link href={`/blog/${slug}`} scroll={false} prefetch>
+    <Link href={`/blog/${slug}`}>
       <Card className="flex gap-2 md:gap-4 p-2 md:p-4">
         <Image
           className="w-16 h-16 md:w-20 md:h-20"
@@ -33,10 +39,12 @@ function MoreCard({ image_url, title, date, excerpt, slug }: MoreCardProps) {
           width={80}
           height={80}
         />
-        <div className="max-w-md">
-          <h3 className="font-semibold text-sm md:text-base">{title}</h3>
-          <p className="text-xs md:text-sm text-gray-500">{date}</p>
-          <p className="text-xs md:text-sm text-gray-600 line-clamp-2">
+        <div className="max-w-md overflow-hidden">
+          <h3 className="font-semibold text-sm md:text-base truncate">
+            {title}
+          </h3>
+          <p className="text-xs md:text-sm text-gray-500 truncate">{date}</p>
+          <p className="text-xs md:text-sm text-gray-600 line-clamp-2 overflow-hidden text-ellipsis">
             {excerpt}
           </p>
         </div>
@@ -45,24 +53,26 @@ function MoreCard({ image_url, title, date, excerpt, slug }: MoreCardProps) {
   );
 }
 
-export async function generateMetadata(
-  {
-    params,
-  }: {
-    params: Promise<{ slug: string }>;
-  }
-): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
   const { slug } = await params;
   const page = await fetchBySlug(slug);
-  
+
   if (!page) {
     return {
-      title: 'Post Not Found'
+      title: "Post Not Found",
     };
   }
 
-  const title = (page.properties.Title as { title: Array<{ plain_text: string }> }).title[0]?.plain_text;
-  const excerpt = (page.properties.Excerpt as { rich_text: Array<{ plain_text: string }> }).rich_text
+  const title = (
+    page.properties.Title as { title: Array<{ plain_text: string }> }
+  ).title[0]?.plain_text;
+  const excerpt = (
+    page.properties.Excerpt as { rich_text: Array<{ plain_text: string }> }
+  ).rich_text
     .map((text: { plain_text: string }) => text.plain_text)
     .join("");
 
@@ -72,10 +82,14 @@ export async function generateMetadata(
     openGraph: {
       title: title,
       description: excerpt,
-      type: 'article',
-      publishedTime: (page.properties.Date as { created_time: string }).created_time,
-      authors: [(page.properties.Author as { rich_text: Array<{ plain_text: string }> }).rich_text[0]?.plain_text],
-    }
+      type: "article",
+      publishedTime: (page.properties.Date as { created_time: string })
+        .created_time,
+      authors: [
+        (page.properties.Author as { rich_text: Array<{ plain_text: string }> })
+          .rich_text[0]?.plain_text,
+      ],
+    },
   };
 }
 
@@ -161,34 +175,49 @@ export default async function Post({
 
   const html = await renderer.render(...blocks);
 
-  
+  const authorUserName = author?.split("|")[0] || "USTH-Coders-Club";
+  const authorName = author?.split("|")[1] || "USTH Coders Club";
+  const authorDescription = author?.split("|")[2] || "RnD";
 
   return (
     <>
       <div className="flex flex-col lg:flex-row font-[family-name:var(--font-manrope)] p-4 md:p-8 lg:p-24 gap-8 lg:gap-20 h-full ">
-        <Card className="w-full lg:w-3/4 p-4 md:p-6 lg:p-8 bg-bg">
-          <CardTitle className="text-2xl md:text-3xl lg:text-[36px] font-bold">
-            {title}
-          </CardTitle>
-          <p className="text-xs md:text-sm text-gray-500">{publishedTime}</p>
-          <div
-            className="notion-render [&>*]:mt-4 first:[&>*]:mt-0"
-            dangerouslySetInnerHTML={{ __html: html }}
-          ></div>
+        <Card className="w-full lg:w-3/4 bg-bg">
+          <CardHeader>
+            <CardTitle className="text-2xl md:text-3xl lg:text-[36px] font-bold">
+              {title}
+            </CardTitle>
+            <CardDescription className="text-xs md:text-sm text-gray-500">
+              {publishedTime}
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div
+              className="notion-render [&>*]:mt-4 first:[&>*]:mt-0"
+              dangerouslySetInnerHTML={{ __html: html }}
+            ></div>
+          </CardContent>
         </Card>
         <div className="w-full lg:w-1/4 flex flex-col gap-8 lg:gap-16">
-          <div className="flex gap-4 items-center">
-            <Avatar className="w-12 h-12 md:w-16 md:h-16">
-              <AvatarImage src="./ucc_logo_black.png" />
-              <AvatarFallback>SB</AvatarFallback>
+          <Card className="flex gap-4 items-center p-2 md:p-4">
+            <Avatar className="w-12 h-12 md:w-16 md:h-16 border-2 border-black">
+              <AvatarImage
+                src={"https://github.com/" + authorUserName + ".png"}
+              />
+              <AvatarFallback>
+                <Image
+                  src="/ucc_logo_black.png"
+                  alt="USTH Coders Club Logo"
+                  width={32}
+                  height={32}
+                />
+              </AvatarFallback>
             </Avatar>
-            <div>
-              <p className="font-bold text-base md:text-lg">{author}</p>
-              <p className="text-sm md:text-base">
-                Cyber Security Analyst, RnD Team
-              </p>
+            <div className="relative p-2 bg-white border-2 border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] before:absolute before:left-[-10px] before:top-4 before:w-0 before:h-0 before:border-t-[8px] before:border-r-[10px] before:border-b-[8px] before:border-t-transparent before:border-r-black before:border-b-transparent before:border-l-transparent">
+              <p className="font-bold text-base md:text-lg">I&apos;m {authorName}</p>
+              <p className="text-sm md:text-base">{authorDescription}</p>
             </div>
-          </div>
+          </Card>
           <div className="flex flex-col gap-3 md:gap-4">
             <p className="font-bold text-lg md:text-xl">More posts</p>
             {morepostlist.map((item, index) => (

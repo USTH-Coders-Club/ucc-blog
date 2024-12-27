@@ -871,3 +871,16 @@ body {
   padding: 7px 9px;
   color: var(--text);
 }
+
+.notion-render img {
+  max-width: 100%;
+  height: auto;
+  padding: 4px;
+  border: 3px solid var(--text);
+}
+
+@media (min-width: 768px) {
+  .notion-render img {
+    max-width: 80%;
+  }
+}
