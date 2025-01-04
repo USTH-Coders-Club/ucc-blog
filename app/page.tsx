@@ -108,10 +108,10 @@ export default function Home() {
 
       {/* Blog Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-[1000px] w-full mx-auto px-4 pb-8">
-        <div className="lg:col-span-1 flex flex-row lg:flex-col gap-2 lg:gap-8 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0">
+        <div className="lg:col-span-1 flex flex-row lg:flex-col gap-2 lg:gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0">
           <Button
             onClick={() => setCategory("All")}
-            className="text-sm lg:text-lg font-semibold whitespace-nowrap font-[family-name:var(--font-space-grotesk)]"
+            className="text-sm lg:text-lg mr-auto font-semibold whitespace-nowrap font-[family-name:var(--font-space-grotesk)]"
           >
             All
           </Button>
@@ -119,7 +119,7 @@ export default function Home() {
           {Object.keys(categoryWithColors).map((category) => (
             <Button
               onClick={() => setCategory(category)}
-              className="text-sm lg:text-lg font-semibold whitespace-nowrap font-[family-name:var(--font-space-grotesk)]"
+              className="text-sm lg:text-lg mr-auto font-semibold whitespace-nowrap font-[family-name:var(--font-space-grotesk)]"
               key={category}
               style={{
                 backgroundColor:
