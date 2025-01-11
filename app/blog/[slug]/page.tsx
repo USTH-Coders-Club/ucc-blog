@@ -13,24 +13,19 @@ import {
   fetchPagesBlocks,
   fetchMorePost,
   notion,
+  fetchSlugsOnly,
 } from "@/lib/notion";
 import bookmarkPlugin from "@notion-render/bookmark-plugin";
 import { NotionRenderer } from "@notion-render/client";
 import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import hljsPlugin from "@notion-render/hljs-plugin";
 import { Metadata } from "next";
+import { MoreCardProps } from "@/types/MoreCardProps";
+import { MorePost } from "@/types/MorePost";
 
-type MoreCardProps = {
-  image_url?: string;
-  title?: string;
-  date?: string;
-  excerpt?: string;
-  author?: string;
-  slug?: string;
-};
 function MoreCard({ image_url, title, date, excerpt, slug }: MoreCardProps) {
   return (
-    <Link href={`/blog/${slug}`}>
+    <Link href={`/blog/${slug}`} prefetch={false}>
       <Card className="flex gap-2 md:gap-4 p-2 md:p-4">
         <Image
           className="w-16 h-16 md:w-20 md:h-20"
@@ -93,6 +88,11 @@ export async function generateMetadata({
   };
 }
 
+export async function generateStaticParams() {
+  const slugs = await fetchSlugsOnly();
+  return slugs.map((slug: string) => ({ slug }));
+}
+
 export default async function Post({
   params,
 }: {
@@ -133,19 +133,6 @@ export default async function Post({
     page.properties.Author as { rich_text: Array<{ plain_text: string }> }
   ).rich_text[0]?.plain_text;
 
-  type MorePost = PageObjectResponse & {
-    properties: {
-      Title: { title: Array<{ plain_text: string }> };
-      Date: { created_time: string };
-      Excerpt: { rich_text: Array<{ plain_text: string }> };
-      Categories: { multi_select: Array<{ name: string }> };
-      slug: { rich_text: Array<{ plain_text: string }> };
-    };
-    cover?: {
-      external?: { url: string };
-      file?: { url: string };
-    };
-  };
   const morepostlist = (morepost.results as MorePost[]).map((item) => ({
     title: item.properties.Title.title[0].plain_text,
     date: new Date(item.properties.Date.created_time).toLocaleDateString(

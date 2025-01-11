@@ -83,6 +83,7 @@ export function NavBar() {
           <div className="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 max-h-[400px] overflow-y-auto">
             {searchResults.map((result: Post, index) => (
               <Link
+                prefetch={false}
                 key={index}
                 href={`/blog/${result.slug}`}
                 className="block p-3 hover:bg-gray-100 dark:hover:bg-gray-700"

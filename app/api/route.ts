@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { fetchPages, fetchBySlug, fetchPagesBlocks, searchPages } from '@/lib/notion'
+import { fetchPages, fetchBySlug, fetchPagesBlocks, searchPages, fetchSlugsOnly } from '@/lib/notion'
 
 export async function GET(request: Request) {
   try {
@@ -7,6 +7,10 @@ export async function GET(request: Request) {
     const action = searchParams.get('action')
     
     switch (action) {
+      case 'listSlugs':
+        const slugs = await fetchSlugsOnly()
+        return NextResponse.json(slugs)
+        
       case 'list':
         const pages = await fetchPages()
         return NextResponse.json(pages)

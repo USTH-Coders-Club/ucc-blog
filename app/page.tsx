@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import FeaturedPostCard from "@/components/FeaturedPostCard";
 import { useState, useEffect } from "react";
-
+import { Post } from "@/types/Post";
 const categoryWithColors = {
   "Cyber Security": "#FF4B4B",
   AI: "#4B83FF",
@@ -14,16 +14,6 @@ const categoryWithColors = {
   "Software Engineering": "#4BFFED",
 };
 
-type Post = {
-  title: string;
-  date: string;
-  excerpt: string;
-  category: string;
-  author: string;
-  tags: string[];
-  image_url: string;
-  slug?: string;
-};
 
 interface NotionPage {
   properties: {
