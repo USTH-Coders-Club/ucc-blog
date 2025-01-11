@@ -17,7 +17,6 @@ import {
 } from "@/lib/notion";
 import bookmarkPlugin from "@notion-render/bookmark-plugin";
 import { NotionRenderer } from "@notion-render/client";
-import { PageObjectResponse } from "@notionhq/client/build/src/api-endpoints";
 import hljsPlugin from "@notion-render/hljs-plugin";
 import { Metadata } from "next";
 import { MoreCardProps } from "@/types/MoreCardProps";
@@ -47,6 +46,9 @@ function MoreCard({ image_url, title, date, excerpt, slug }: MoreCardProps) {
     </Link>
   );
 }
+
+export const dynamicParams = true;
+export const revalidate = 1800; // 30 minutes
 
 export async function generateMetadata({
   params,
@@ -87,6 +89,22 @@ export async function generateMetadata({
     },
   };
 }
+
+export async function getStaticPaths() {
+  // Fetch all slugs from the database
+  const slugs = await fetchSlugsOnly();
+
+  // Map slugs into the `params` object structure required by Next.js
+  const paths = slugs.map((slug: string) => ({
+    params: { slug },
+  }));
+
+  return {
+    paths, // Pre-render these paths at build time
+    fallback: "true", // Handle new or dynamically added slugs
+  };
+}
+
 
 export async function generateStaticParams() {
   const slugs = await fetchSlugsOnly();
