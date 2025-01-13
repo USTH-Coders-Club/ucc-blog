@@ -90,22 +90,6 @@ export async function generateMetadata({
   };
 }
 
-export async function getStaticPaths() {
-  // Fetch all slugs from the database
-  const slugs = await fetchSlugsOnly();
-
-  // Map slugs into the `params` object structure required by Next.js
-  const paths = slugs.map((slug: string) => ({
-    params: { slug },
-  }));
-
-  return {
-    paths, // Pre-render these paths at build time
-    fallback: "true", // Handle new or dynamically added slugs
-  };
-}
-
-
 export async function generateStaticParams() {
   const slugs = await fetchSlugsOnly();
   return slugs.map((slug: string) => ({ slug }));
