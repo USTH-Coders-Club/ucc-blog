@@ -4,16 +4,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import Link from "next/link";
 
-type FeaturedPostCardProps = {
-  title?: string;
-  date?: string;
-  excerpt?: string;
-  category?: string;
-  author?: string;
-  tags?: string[];
-  image_url?: string;
-  slug?: string;
-};
+import { FeaturedPostCardProps } from "@/types/FeaturedPostCardProps";
 
 export default function FeaturedPostCard({
   title,
@@ -28,7 +19,7 @@ export default function FeaturedPostCard({
   const authorUserName = author?.split("|")[0] || "USTH-Coders-Club";
   const authorName = author?.split("|")[1] || "USTH Coders Club";
   return (
-    <Link href={`/blog/${slug}`}>
+    <Link href={`/blog/${slug}`} prefetch={false}>
       <Card className="w-full h-[300px] sm:h-[350px] md:h-[400px] lg:h-[450px] flex flex-col justify-end p-4 md:p-6 gap-2 sm:gap-3">
         <div className="relative flex-1 w-full">
           <Image
