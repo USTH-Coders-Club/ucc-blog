@@ -2,7 +2,8 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import FeaturedPostCard from "@/components/FeaturedPostCard";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const categoryWithColors = {
   "Cyber Security": "#FF4B4B",
@@ -45,45 +46,64 @@ export default function Home() {
   const [category, setCategory] = useState("All");
   const [posts, setPosts] = useState([] as Post[]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
-  useEffect(() => {
+  // Memoize the fetch function
+  const fetchPosts = useCallback(async () => {
     setLoading(true);
-    fetch("/api?action=list")
-      .then((res) => res.json())
-      .then((data) => {
-        const transformedPosts: Post[] = data.results.map(
-          (item: NotionPage) => ({
-            title: item.properties.Title.title[0].plain_text,
-            date: new Date(
-              item.properties.Date.created_time
-            ).toLocaleDateString("en-US", {
-              weekday: "short",
-              year: "numeric",
-              month: "short",
-              day: "numeric",
-            }),
-            excerpt: item.properties.Excerpt.rich_text
-              .map((text: { plain_text: string }) => text.plain_text)
-              .join(""),
-            category: item.properties.Categories.multi_select[0]?.name || "",
-            author: item.properties.Author.rich_text[0]?.plain_text || "",
-            tags: item.properties.Tags.multi_select.map(
-              (tag: { name: string }) => tag.name
-            ),
-            image_url: item.cover?.external?.url || item.cover?.file?.url || "",
-            slug: item.properties.slug.rich_text[0]?.plain_text || "",
-          })
-        );
-
-        const filteredPosts =
-          category === "All"
-            ? transformedPosts
-            : transformedPosts.filter((post) => post.category === category);
-
-        setPosts(filteredPosts);
-        setLoading(false);
+    try {
+      const params = new URLSearchParams({
+        action: 'list',
+        page: currentPage.toString(),
+        pageSize: '5',
+        category: category,
       });
+
+      const response = await fetch(`/api?${params}`);
+      const data = await response.json();
+
+      const transformedPosts: Post[] = data.results.map((item: NotionPage) => ({
+        title: item.properties.Title.title[0]?.plain_text || "Untitled",
+        date: new Date(item.properties.Date.created_time).toLocaleDateString("en-US", {
+          weekday: "short",
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+        }),
+        excerpt:
+          item.properties.Excerpt.rich_text
+            .map((text: { plain_text: string }) => text.plain_text)
+            .join("") || "No excerpt available",
+        category: item.properties.Categories.multi_select[0]?.name || "Uncategorized",
+        author: item.properties.Author.rich_text[0]?.plain_text || "Anonymous",
+        tags: item.properties.Tags.multi_select?.map((tag: { name: string }) => tag.name) || [],
+        image_url: item.cover?.external?.url || item.cover?.file?.url || "/ucc_logo_black.png",
+        slug: item.properties.slug.rich_text[0]?.plain_text || "",
+      }));
+
+      setPosts(transformedPosts);
+      setTotalPages(data.totalPages);
+    } catch (error) {
+      console.error('Failed to fetch posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [currentPage, category]); // Only depend on currentPage and category
+
+  // Effect for initial load and category changes
+  useEffect(() => {
+    setCurrentPage(1);
   }, [category]);
+
+  // Effect for fetching posts
+  useEffect(() => {
+    fetchPosts();
+  }, [fetchPosts]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="flex flex-col font-[family-name:var(--font-manrope)]">
@@ -162,6 +182,36 @@ export default function Home() {
             <div className="flex flex-col items-center justify-center h-64">
               <span className="text-2xl font-bold">No posts found</span>
               <span className="text-lg">Please try again later</span>
+            </div>
+          )}
+          {!loading && totalPages > 1 && (
+            <div className="flex justify-center items-center gap-2">
+              <Button
+                variant="neutral"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+              </Button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <Button
+                  key={page}
+                  variant={currentPage === page ? "default" : "neutral"}
+                  disabled={currentPage === page}
+                  onClick={() => handlePageChange(page)}
+                >
+                  {page}
+                </Button>
+              ))}
+
+              <Button
+                variant="neutral"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                <ChevronRight className="h-4 w-4" />
+              </Button>
             </div>
           )}
         </div>

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { fetchPages, fetchBySlug, fetchPagesBlocks, searchPages } from '@/lib/notion'
+import { fetchBySlug, fetchPagesBlocks, searchPages, fetchPaginatedPages } from '@/lib/notion'
 
 export async function GET(request: Request) {
   try {
@@ -8,8 +8,11 @@ export async function GET(request: Request) {
     
     switch (action) {
       case 'list':
-        const pages = await fetchPages()
-        return NextResponse.json(pages)
+        const pageNumber = Number(searchParams.get('page')) || 1;
+        const pageSize = Number(searchParams.get('pageSize')) || 5;
+        const category = searchParams.get('category') || 'All';
+        const paginatedPages = await fetchPaginatedPages(pageNumber, pageSize, category);
+        return NextResponse.json(paginatedPages);
       
       case 'search':
         const query = searchParams.get('q')
@@ -20,8 +23,8 @@ export async function GET(request: Request) {
       case 'getBySlug':
         const slug = searchParams.get('slug')
         if (!slug) return NextResponse.json({ error: 'Slug parameter required' }, { status: 400 })
-        const page = await fetchBySlug(slug)
-        return NextResponse.json(page || { error: 'Page not found' })
+        const pageData = await fetchBySlug(slug)
+        return NextResponse.json(pageData || { error: 'Page not found' })
       
       case 'getBlocks':
         const pageId = searchParams.get('pageId')
