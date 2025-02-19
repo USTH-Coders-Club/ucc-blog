@@ -136,7 +136,7 @@ export default async function Post({
   ).rich_text[0]?.plain_text;
 
   const morepostlist = (morepost.results as MorePost[]).map((item) => ({
-    title: item.properties.Title.title[0].plain_text,
+    title: item.properties.Title.title[0]?.plain_text || "Untitled",
     date: new Date(item.properties.Date.created_time).toLocaleDateString(
       "en-US",
       {
@@ -148,9 +148,9 @@ export default async function Post({
     ),
     excerpt: item.properties.Excerpt.rich_text
       .map((text: { plain_text: string }) => text.plain_text)
-      .join(""),
-    category: item.properties.Categories.multi_select[0]?.name || "",
-    image_url: item.cover?.external?.url || item.cover?.file?.url || "",
+      .join("") || "No excerpt available",
+    category: item.properties.Categories.multi_select[0]?.name || "Uncategorized",
+    image_url: item.cover?.external?.url || item.cover?.file?.url || "/ucc_logo_black.png",
     slug: item.properties.slug.rich_text[0]?.plain_text || "",
   }));
 
@@ -187,7 +187,7 @@ export default async function Post({
             ></div>
           </CardContent>
         </Card>
-        <div className="w-full lg:w-1/4 flex flex-col gap-8 lg:gap-16">
+        <div className="w-full lg:w-1/4 flex flex-col gap-8 lg:gap-16 lg:sticky lg:top-24 lg:h-fit">
           <Card className="flex gap-4 items-center p-2 md:p-4">
             <Avatar className="w-12 h-12 md:w-16 md:h-16 border-2 border-black">
               <AvatarImage
@@ -203,7 +203,9 @@ export default async function Post({
               </AvatarFallback>
             </Avatar>
             <div className="relative p-2 bg-white border-2 border-black rounded shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] before:absolute before:left-[-10px] before:top-4 before:w-0 before:h-0 before:border-t-[8px] before:border-r-[10px] before:border-b-[8px] before:border-t-transparent before:border-r-black before:border-b-transparent before:border-l-transparent">
-              <p className="font-bold text-base md:text-lg">I&apos;m {authorName}</p>
+              <p className="font-bold text-base md:text-lg">
+                I&apos;m {authorName}
+              </p>
               <p className="text-sm md:text-base">{authorDescription}</p>
             </div>
           </Card>

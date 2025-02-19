@@ -106,3 +106,39 @@ export const searchPages = React.cache(async (query: string) => {
   });
   return response.results as PageObjectResponse[];
 });
+
+export const fetchPaginatedPages = async (page: number = 1, pageSize: number = 5, category: string = "All") => {
+  const baseFilter = {
+    property: "Status",
+    status: {
+      equals: "Live",
+    },
+  };
+
+  const categoryFilter = category !== "All" ? {
+    property: "Categories",
+    multi_select: {
+      contains: category,
+    },
+  } : undefined;
+
+  const filter = categoryFilter 
+    ? { and: [baseFilter, categoryFilter] }
+    : baseFilter;
+
+  const allPages = await notion.databases.query({
+    database_id: process.env.NOTION_DATABASE_ID!,
+    filter,
+  });
+
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
+  
+  return {
+    results: allPages.results.slice(start, end),
+    total: allPages.results.length,
+    page,
+    pageSize,
+    totalPages: Math.ceil(allPages.results.length / pageSize),
+  };
+};
