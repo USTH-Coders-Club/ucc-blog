@@ -10,6 +10,31 @@ export const notion = new Client({
   auth: process.env.NOTION_SECRET,
 });
 
+export const fetchSlugsOnly = async () => {
+  const response = await notion.databases.query({
+    database_id: process.env.NOTION_DATABASE_ID!,
+    filter: {
+      property: "Status",
+      status: {
+        equals: "Live",
+      },
+    },
+  });
+  
+  interface NotionPage {
+    properties: {
+      slug: {
+        rich_text: Array<{
+          plain_text: string;
+        }>;
+      };
+    };
+  }
+
+  const results = JSON.parse(JSON.stringify(response));
+  return results.results.map((page: NotionPage) => page.properties.slug.rich_text[0].plain_text);
+};
+
 export const fetchPages = async () => {
   return notion.databases.query({
     database_id: process.env.NOTION_DATABASE_ID!,

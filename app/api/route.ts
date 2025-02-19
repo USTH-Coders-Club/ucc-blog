@@ -7,6 +7,10 @@ export async function GET(request: Request) {
     const action = searchParams.get('action')
     
     switch (action) {
+      case 'listSlugs':
+        const slugs = await fetchSlugsOnly()
+        return NextResponse.json(slugs)
+        
       case 'list':
         const pageNumber = Number(searchParams.get('page')) || 1;
         const pageSize = Number(searchParams.get('pageSize')) || 5;

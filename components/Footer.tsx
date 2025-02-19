@@ -88,14 +88,14 @@ export function Footer() {
           </a>
           <a
             href="https://www.tiktok.com/@usthcodersclub"
-            className="flex items-center gap-2 bg-black text-white px-6 py-3 font-bold rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all"
+            className="flex items-center gap-2 bg-white text-black px-6 py-3 font-bold rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               width={24}
               height={24}
-              color={"#ffffff"}
+              color={"#000000"}
               fill={"none"}
             >
               <path
