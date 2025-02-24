@@ -4,7 +4,7 @@ import { Input } from "./ui/input";
 import { Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react"; // Add useRef
 
 interface Post {
   title?: string;
@@ -27,11 +27,27 @@ export function NavBar() {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState<Post[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const searchContainerRef = useRef<HTMLDivElement>(null);
 
+  // Add click outside handler
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
+        setShowResults(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // Modify search effect to show results
   useEffect(() => {
     const searchPages = async () => {
       if (!searchQuery.trim()) {
         setSearchResults([]);
+        setShowResults(false);
         return;
       }
       
@@ -45,6 +61,7 @@ export function NavBar() {
           image_url: item.cover?.external?.url || item.cover?.file?.url || "",
           slug: item.properties.slug.rich_text[0]?.plain_text || "",
         })));
+        setShowResults(true);
       } catch (error) {
         console.error('Search failed:', error);
       }
@@ -70,16 +87,17 @@ export function NavBar() {
         </span>
       </Link>
 
-      <div className="relative w-32 sm:w-48 md:w-64">
+      <div className="relative w-32 sm:w-48 md:w-64" ref={searchContainerRef}>
         <Input 
           placeholder="Search..." 
           className="pl-10"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
+          onFocus={() => setShowResults(true)}
         />
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
         
-        {searchResults.length > 0 && (
+        {showResults && searchResults.length > 0 && (
           <div className="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700 max-h-[400px] overflow-y-auto">
             {searchResults.map((result: Post, index) => (
               <Link
@@ -102,7 +120,7 @@ export function NavBar() {
           </div>
         )}
         
-        {isLoading && (
+        {showResults && isLoading && (
           <div className="absolute top-full mt-2 w-full bg-white dark:bg-gray-800 rounded-md shadow-lg p-4 text-center">
             Searching...
           </div>

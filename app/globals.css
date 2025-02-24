@@ -879,6 +879,17 @@ body {
   border: 3px solid var(--text);
 }
 
+.notion-text-code {
+  font-family: "Fira Code", monospace;
+  font-size: 0.875em;
+  line-height: 1.5;
+  padding: 0.1em 0.5em;
+  background-color: var(--bg);
+  border-radius: 5px;
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
 @media (min-width: 768px) {
   .notion-render img {
     max-width: 80%;

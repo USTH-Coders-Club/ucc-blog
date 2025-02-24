@@ -2,7 +2,7 @@ export function Footer() {
   return (
     <footer className="w-full bg-[var(--main)] border-t-4 border-[var(--border)] mt-8">
       <div className="flex justify-center py-8">
-        <div className="flex gap-4 overflow-x-auto lg:overflow-x-visible pb-2">
+        <div className="flex gap-4 overflow-x-auto lg:overflow-x-visible pb-2 px-2">
           <a
             href="https://www.facebook.com/USTH.Coders.Club"
             className="flex items-center gap-2 bg-blue-500 text-white px-6 py-3 font-bold rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-none hover:translate-x-[3px] hover:translate-y-[3px] transition-all"

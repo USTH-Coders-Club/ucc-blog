@@ -128,27 +128,29 @@ export default function Home() {
 
       {/* Blog Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-[1000px] w-full mx-auto px-4 pb-8">
-        <div className="lg:col-span-1 flex flex-row lg:flex-col gap-2 lg:gap-6 overflow-x-auto lg:overflow-x-visible pb-4 lg:pb-0">
+        <div className="lg:col-span-1 flex flex-row lg:flex-col gap-2 lg:gap-6 overflow-x-auto lg:overflow-x-visible pb-4 px-2 lg:pb-0 lg:sticky lg:top-28 lg:h-fit">
           <Button
             onClick={() => setCategory("All")}
             className="text-sm lg:text-lg mr-auto font-semibold whitespace-nowrap font-[family-name:var(--font-space-grotesk)]"
+            disabled={category === "All"}
           >
             All
           </Button>
 
-          {Object.keys(categoryWithColors).map((category) => (
+          {Object.keys(categoryWithColors).map((cat) => (
             <Button
-              onClick={() => setCategory(category)}
+              onClick={() => setCategory(cat)}
               className="text-sm lg:text-lg mr-auto font-semibold whitespace-nowrap font-[family-name:var(--font-space-grotesk)]"
-              key={category}
+              key={cat}
+              disabled={category === cat}
               style={{
-                backgroundColor:
-                  categoryWithColors[
-                    category as keyof typeof categoryWithColors
-                  ],
+          backgroundColor:
+            categoryWithColors[
+              cat as keyof typeof categoryWithColors
+            ],
               }}
             >
-              {category}
+              {cat}
             </Button>
           ))}
         </div>
@@ -180,7 +182,7 @@ export default function Home() {
             ))}
           {!loading && posts.length === 0 && (
             <div className="flex flex-col items-center justify-center h-64">
-              <span className="text-2xl font-bold">No posts found</span>
+              <span className="text-2xl font-bold">No posts found for {category}</span>
               <span className="text-lg">Please try again later</span>
             </div>
           )}

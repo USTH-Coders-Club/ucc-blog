@@ -32,20 +32,21 @@ function MoreCard({ image_url, title, date, excerpt, slug }: MoreCardProps) {
   return (
     <Link href={`/blog/${slug}`}>
       <Card className="flex gap-2 md:gap-4 p-2 md:p-4">
-        <Image
-          className="w-16 h-16 md:w-20 md:h-20"
-          src={image_url || "/ucc_logo_black.png"}
-          alt="UCC Logo"
-          width={80}
-          height={80}
-        />
-        <div className="max-w-md overflow-hidden">
+        <div className="w-1/3 relative flex-shrink-0">
+          <Image
+        className="object-cover"
+        src={image_url || "/ucc_logo_black.png"}
+        alt="UCC Logo"
+        fill
+          />
+        </div>
+        <div className="w-2/3 overflow-hidden">
           <h3 className="font-semibold text-sm md:text-base truncate">
-            {title}
+        {title}
           </h3>
           <p className="text-xs md:text-sm text-gray-500 truncate">{date}</p>
           <p className="text-xs md:text-sm text-gray-600 line-clamp-2 overflow-hidden text-ellipsis">
-            {excerpt}
+        {excerpt}
           </p>
         </div>
       </Card>
@@ -198,7 +199,7 @@ export default async function Post({
             ></div>
           </CardContent>
         </Card>
-        <div className="w-full lg:w-1/4 flex flex-col gap-8 lg:gap-16 lg:sticky lg:top-24 lg:h-fit">
+        <div className="w-full lg:w-1/4 flex flex-col gap-8 lg:gap-16 lg:sticky lg:top-28 lg:h-fit">
           <Card className="flex gap-4 items-center p-2 md:p-4">
             <Avatar className="w-12 h-12 md:w-16 md:h-16 border-2 border-black">
               <AvatarImage
