@@ -6,13 +6,14 @@ import { useState, useEffect, useCallback } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const categoryWithColors = {
-  "Cyber Security": "#FF4B4B",
-  AI: "#4B83FF",
-  Blockchain: "#FFB74B",
-  Web3: "#4BFFA7",
-  Cloud: "#A74BFF",
-  DevOps: "#FF4B9D",
-  "Software Engineering": "#4BFFED",
+  "Web Development": "#4B83FF",
+  "Mobile Development": "#FF4B4B",
+  "Data Science": "#4BFFA7",
+  "Machine Learning": "#A74BFF",
+  "DevOps": "#FFB74B",
+  "Cybersecurity": "#FF4B9D",
+  "Programming": "#4BFF4B",
+  "Cloud Computing": "#4BFFED",
 };
 
 type Post = {
